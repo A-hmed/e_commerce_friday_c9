@@ -8,6 +8,5 @@ class BaseRequestSuccessState extends BaseRequestStates {}
 
 class BaseRequestErrorState extends BaseRequestStates {
   String message;
-
   BaseRequestErrorState(this.message);
 }
