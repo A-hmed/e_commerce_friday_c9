@@ -1,6 +1,8 @@
-
+import 'package:e_commerce_friday_c9/domain/di/di.dart';
 import 'package:e_commerce_friday_c9/ui/screens/auth/login/login.dart';
+import 'package:e_commerce_friday_c9/ui/screens/home/home.dart';
 import 'package:e_commerce_friday_c9/ui/utils/app_assets.dart';
+import 'package:e_commerce_friday_c9/ui/utils/shared_prefecences_utils.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,8 +21,14 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(
         Duration(
           seconds: 2,
-        ), () {
-      Navigator.pushNamed(context, Login.routeName);
+        ), () async {
+      SharedPrefUtils utils = getIt();
+      String? token = await utils.getToken();
+      if (token == null) {
+        Navigator.pushNamed(context, Login.routeName);
+      } else {
+        Navigator.pushNamed(context, Home.routeName);
+      }
     });
   }
 
@@ -29,9 +37,11 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Container(
         color: Colors.red,
-        child: Image.asset(AppAssets.splash,
+        child: Image.asset(
+          AppAssets.splash,
           width: double.infinity,
-          fit: BoxFit.fill,),
+          fit: BoxFit.fill,
+        ),
       ),
     );
   }

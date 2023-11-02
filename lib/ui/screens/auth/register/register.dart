@@ -1,5 +1,4 @@
-import 'package:e_commerce_friday_c9/data/repos/auth_repo/auth_repo_impl.dart';
-import 'package:e_commerce_friday_c9/domain/use_cases/register_use_case.dart';
+import 'package:e_commerce_friday_c9/domain/di/di.dart';
 import 'package:e_commerce_friday_c9/ui/screens/auth/register/register_view_model.dart';
 import 'package:e_commerce_friday_c9/ui/utils/base_states.dart';
 import 'package:e_commerce_friday_c9/ui/utils/dialog_utils.dart';
@@ -9,11 +8,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_text_form_field.dart';
 import '../../../widgets/form_label.dart';
+import '../../home/home.dart';
 
 class Register extends StatelessWidget {
   static const String routeName = 'register';
-  RegisterViewModel viewModel =
-      RegisterViewModel(RegisterUseCase(AuthRepoImpl()));
+  RegisterViewModel viewModel = getIt<RegisterViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +26,7 @@ class Register extends StatelessWidget {
           showErrorDialog(context, state.errorMessage);
         } else if (state is BaseSuccessState) {
           hideLoading(context);
+          Navigator.pushNamed(context, Home.routeName);
         }
       },
       child: Scaffold(
