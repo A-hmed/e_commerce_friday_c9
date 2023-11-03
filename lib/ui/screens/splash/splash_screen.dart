@@ -1,5 +1,7 @@
 
+import 'package:e_commerce_friday_c9/data/utils/shared_pref_utils.dart';
 import 'package:e_commerce_friday_c9/ui/screens/auth/login/login.dart';
+import 'package:e_commerce_friday_c9/ui/screens/main/main_screen.dart';
 import 'package:e_commerce_friday_c9/ui/utils/app_assets.dart';
 import 'package:flutter/material.dart';
 
@@ -13,11 +15,17 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  SharedPrefUtils sharedPrefUtils = SharedPrefUtils();
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 1), () {
-      Navigator.pushReplacementNamed(context, Login.routeName);
+    Future.delayed(Duration(seconds: 1), () async {
+      if (await sharedPrefUtils.getUser() != null) {
+        Navigator.pushReplacementNamed(context, MainScreen.routeName);
+      } else {
+        Navigator.pushReplacementNamed(context, Login.routeName);
+      }
     });
   }
 

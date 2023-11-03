@@ -1,9 +1,7 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:e_commerce_friday_c9/data/repos/auth_repo/auth_repo_impl.dart';
-import 'package:e_commerce_friday_c9/data/repos/auth_repo/data_sources/online_ds_impl.dart';
-import 'package:e_commerce_friday_c9/domain/use_cases/login_use_case.dart';
+import 'package:e_commerce_friday_c9/domain/di/di.dart';
 import 'package:e_commerce_friday_c9/ui/screens/auth/login/login_view_model.dart';
 import 'package:e_commerce_friday_c9/ui/screens/auth/register/register.dart';
+import 'package:e_commerce_friday_c9/ui/screens/main/main_screen.dart';
 import 'package:e_commerce_friday_c9/ui/utils/app_assets.dart';
 import 'package:e_commerce_friday_c9/ui/utils/base_request_states.dart';
 import 'package:e_commerce_friday_c9/ui/utils/dialog_utils.dart';
@@ -22,8 +20,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  late LoginViewModel viewModel = LoginViewModel(
-      LoginUseCase(AuthRepoImpl(AuthOnlineDSImpl(), Connectivity())));
+  late LoginViewModel viewModel = getIt();
 
   @override
   void initState() {
@@ -149,6 +146,7 @@ class _LoginState extends State<Login> {
           showLoading(context);
         } else if (state is BaseRequestSuccessState) {
           hideLoading(context);
+          Navigator.pushNamed(context, MainScreen.routeName);
         } else if (state is BaseRequestErrorState) {
           hideLoading(context);
           showErrorDialog(context, state.message);
