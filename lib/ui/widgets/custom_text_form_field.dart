@@ -2,19 +2,23 @@ import 'package:e_commerce_friday_c9/ui/utils/app_color.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  String hintText ;
-  bool isPassword ;
-  TextEditingController controller ;
+  String hintText;
+
+  bool isPassword;
+
+  TextEditingController controller;
+
   String? Function(String?)? validator;
-  TextInputType type ;
+  TextInputType type;
 
   CustomTextFormField({
     required this.hintText,
     this.isPassword = false,
     required this.controller,
-    required this.validator ,
-    required this.type ,
+    required this.validator,
+    required this.type,
   });
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
