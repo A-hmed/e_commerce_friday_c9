@@ -1,6 +1,6 @@
 import 'package:e_commerce_friday_c9/domain/di/di.dart';
 import 'package:e_commerce_friday_c9/ui/screens/auth/login/login.dart';
-import 'package:e_commerce_friday_c9/ui/screens/home/home.dart';
+import 'package:e_commerce_friday_c9/ui/screens/main/main.dart';
 import 'package:e_commerce_friday_c9/ui/utils/app_assets.dart';
 import 'package:e_commerce_friday_c9/ui/utils/shared_prefecences_utils.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (token == null) {
         Navigator.pushNamed(context, Login.routeName);
       } else {
-        Navigator.pushNamed(context, Home.routeName);
+        Navigator.pushNamed(context, MainScreen.routeName);
       }
     });
   }

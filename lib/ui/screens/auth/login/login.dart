@@ -1,7 +1,7 @@
 import 'package:e_commerce_friday_c9/domain/di/di.dart';
 import 'package:e_commerce_friday_c9/ui/screens/auth/login/login_view_model.dart';
 import 'package:e_commerce_friday_c9/ui/screens/auth/register/register.dart';
-import 'package:e_commerce_friday_c9/ui/screens/home/home.dart';
+import 'package:e_commerce_friday_c9/ui/screens/main/main.dart';
 import 'package:e_commerce_friday_c9/ui/utils/app_assets.dart';
 import 'package:e_commerce_friday_c9/ui/utils/base_states.dart';
 import 'package:e_commerce_friday_c9/ui/utils/dialog_utils.dart';
@@ -141,7 +141,7 @@ class _LoginState extends State<Login> {
             showLoading(context);
           } else if (state is BaseSuccessState) {
             Navigator.pop(context);
-            Navigator.pushNamed(context, Home.routeName);
+            Navigator.pushNamed(context, MainScreen.routeName);
           } else if (state is BaseErrorState) {
             Navigator.pop(context);
             showErrorDialog(context, state.errorMessage);

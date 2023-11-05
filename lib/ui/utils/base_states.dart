@@ -1,3 +1,5 @@
+
+
 class BaseInitialState {}
 
 class BaseLoadingState {}
@@ -8,4 +10,8 @@ class BaseErrorState {
   BaseErrorState(this.errorMessage);
 }
 
-class BaseSuccessState {}
+class BaseSuccessState<Type> {
+  List<Type>? data;
+
+  BaseSuccessState({this.data});
+}

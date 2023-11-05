@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_text_form_field.dart';
 import '../../../widgets/form_label.dart';
-import '../../home/home.dart';
+import '../../main/main.dart';
 
 class Register extends StatelessWidget {
   static const String routeName = 'register';
@@ -26,7 +26,7 @@ class Register extends StatelessWidget {
           showErrorDialog(context, state.errorMessage);
         } else if (state is BaseSuccessState) {
           hideLoading(context);
-          Navigator.pushNamed(context, Home.routeName);
+          Navigator.pushNamed(context, MainScreen.routeName);
         }
       },
       child: Scaffold(
