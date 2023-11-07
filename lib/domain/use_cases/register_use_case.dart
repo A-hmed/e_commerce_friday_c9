@@ -1,9 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:e_commerce_friday_c9/data/model/request/registe_request_body.dart';
 import 'package:e_commerce_friday_c9/domain/repos/auth_repo/auth_repo.dart';
+import 'package:injectable/injectable.dart';
 
 import '../../data/model/failures.dart';
 
+@injectable
 class RegisterUseCase {
   AuthRepo repo;
 

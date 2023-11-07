@@ -1,7 +1,7 @@
-import 'package:e_commerce_friday_c9/data/repos/auth_repo/auth_repo_impl.dart';
-import 'package:e_commerce_friday_c9/domain/use_cases/login_use_case.dart';
+import 'package:e_commerce_friday_c9/domain/di/di.dart';
 import 'package:e_commerce_friday_c9/ui/screens/auth/login/login_view_model.dart';
 import 'package:e_commerce_friday_c9/ui/screens/auth/register/register.dart';
+import 'package:e_commerce_friday_c9/ui/screens/main/main.dart';
 import 'package:e_commerce_friday_c9/ui/utils/app_assets.dart';
 import 'package:e_commerce_friday_c9/ui/utils/base_states.dart';
 import 'package:e_commerce_friday_c9/ui/utils/dialog_utils.dart';
@@ -20,7 +20,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  LoginViewModel viewModel = LoginViewModel(LoginUseCase(AuthRepoImpl()));
+  LoginViewModel viewModel = getIt();
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class _LoginState extends State<Login> {
                           return 'Please enter email';
                         }
                         var emailValid = RegExp(
-                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                             .hasMatch(text);
 
                         if (!emailValid) {
@@ -141,6 +141,7 @@ class _LoginState extends State<Login> {
             showLoading(context);
           } else if (state is BaseSuccessState) {
             Navigator.pop(context);
+            Navigator.pushNamed(context, MainScreen.routeName);
           } else if (state is BaseErrorState) {
             Navigator.pop(context);
             showErrorDialog(context, state.errorMessage);

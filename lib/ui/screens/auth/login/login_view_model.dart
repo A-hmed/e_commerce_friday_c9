@@ -4,7 +4,9 @@ import 'package:e_commerce_friday_c9/domain/use_cases/login_use_case.dart';
 import 'package:e_commerce_friday_c9/ui/utils/base_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class LoginViewModel extends Cubit {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
@@ -16,8 +18,9 @@ class LoginViewModel extends Cubit {
   void login() async {
     if (!formKey.currentState!.validate()) return;
     emit(BaseLoadingState());
-    Either<Failure, bool> response = await loginUseCase.execute(
-        emailController.text, passwordController.text);
+    loginUseCase.email = emailController.text;
+    loginUseCase.password = passwordController.text;
+    Either<Failure, bool> response = await loginUseCase.execute();
     response.fold((error) {
       emit(BaseErrorState(error.errorMessage));
     }, (success) {

@@ -1,5 +1,8 @@
-
+import 'package:e_commerce_friday_c9/data/model/response/auth_response.dart';
+import 'package:e_commerce_friday_c9/data/utils/sharedpref_utils.dart';
+import 'package:e_commerce_friday_c9/domain/di/di.dart';
 import 'package:e_commerce_friday_c9/ui/screens/auth/login/login.dart';
+import 'package:e_commerce_friday_c9/ui/screens/main/main.dart';
 import 'package:e_commerce_friday_c9/ui/utils/app_assets.dart';
 import 'package:flutter/material.dart';
 
@@ -19,8 +22,14 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(
         Duration(
           seconds: 2,
-        ), () {
-      Navigator.pushNamed(context, Login.routeName);
+        ), () async {
+      var prefs = getIt<SharedPrefUtils>();
+      User? user = await prefs.getUser();
+      if (user == null) {
+        Navigator.pushNamed(context, Login.routeName);
+      } else {
+        Navigator.pushNamed(context, MainScreen.routeName);
+      }
     });
   }
 

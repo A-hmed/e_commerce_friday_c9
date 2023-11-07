@@ -1,6 +1,6 @@
-import 'package:e_commerce_friday_c9/data/repos/auth_repo/auth_repo_impl.dart';
-import 'package:e_commerce_friday_c9/domain/use_cases/register_use_case.dart';
+import 'package:e_commerce_friday_c9/domain/di/di.dart';
 import 'package:e_commerce_friday_c9/ui/screens/auth/register/register_view_model.dart';
+import 'package:e_commerce_friday_c9/ui/screens/main/main.dart';
 import 'package:e_commerce_friday_c9/ui/utils/base_states.dart';
 import 'package:e_commerce_friday_c9/ui/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +12,7 @@ import '../../../widgets/form_label.dart';
 
 class Register extends StatelessWidget {
   static const String routeName = 'register';
-  RegisterViewModel viewModel =
-      RegisterViewModel(RegisterUseCase(AuthRepoImpl()));
+  RegisterViewModel viewModel = getIt();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +26,7 @@ class Register extends StatelessWidget {
           showErrorDialog(context, state.errorMessage);
         } else if (state is BaseSuccessState) {
           hideLoading(context);
+          Navigator.pushNamed(context, MainScreen.routeName);
         }
       },
       child: Scaffold(
