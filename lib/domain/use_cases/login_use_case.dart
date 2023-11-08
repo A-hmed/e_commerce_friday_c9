@@ -7,9 +7,7 @@ import '../../data/model/failures.dart';
 @injectable
 class LoginUseCase {
   AuthRepo repo;
-
   LoginUseCase(this.repo);
-
   String email = "";
   String password = "";
 
