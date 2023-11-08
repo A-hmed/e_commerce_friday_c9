@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:e_commerce_friday_c9/data/model/failures.dart';
+import 'package:e_commerce_friday_c9/data/model/response/cart_dm.dart';
 import 'package:e_commerce_friday_c9/data/model/response/category_dm.dart';
 import 'package:e_commerce_friday_c9/data/model/response/product_dm.dart';
 import 'package:e_commerce_friday_c9/data/repos/main_repo/data_source/main_data_source.dart';
@@ -29,6 +30,37 @@ class MainRepoImpl {
     if (result == ConnectivityResult.mobile ||
         result == ConnectivityResult.wifi) {
       return mainDataSource.getProducts();
+    } else {
+      return Left(Failure(Constants.internetErrorMessage));
+    }
+  }
+
+  Future<Either<Failure, CartDM>> addProductToCart(String productId) async {
+    var result = await connectivity.checkConnectivity();
+    if (result == ConnectivityResult.mobile ||
+        result == ConnectivityResult.wifi) {
+      return mainDataSource.addProductToCart(productId);
+    } else {
+      return Left(Failure(Constants.internetErrorMessage));
+    }
+  }
+
+  Future<Either<Failure, CartDM>> removeProductFromCart(
+      String productId) async {
+    var result = await connectivity.checkConnectivity();
+    if (result == ConnectivityResult.mobile ||
+        result == ConnectivityResult.wifi) {
+      return mainDataSource.removeProductFromCart(productId);
+    } else {
+      return Left(Failure(Constants.internetErrorMessage));
+    }
+  }
+
+  Future<Either<Failure, CartDM>> getUserCart() async {
+    var result = await connectivity.checkConnectivity();
+    if (result == ConnectivityResult.mobile ||
+        result == ConnectivityResult.wifi) {
+      return mainDataSource.getLoggedUserCart();
     } else {
       return Left(Failure(Constants.internetErrorMessage));
     }

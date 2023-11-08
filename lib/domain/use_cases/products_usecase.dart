@@ -17,6 +17,6 @@ class GetAllProductsUseCase extends Cubit {
 
     Either<Failure, List<ProductDM>> either = await repo.getProducts();
     either.fold((failure) => emit(BaseErrorState(failure.errorMessage)),
-        (r) => emit(BaseSuccessState<ProductDM>(data: r)));
+        (r) => emit(BaseSuccessState<List<ProductDM>>(data: r)));
   }
 }

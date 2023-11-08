@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:e_commerce_friday_c9/data/model/response/cart_dm.dart';
 import 'package:e_commerce_friday_c9/data/model/response/category_dm.dart';
 import 'package:e_commerce_friday_c9/data/model/response/product_dm.dart';
 import 'package:e_commerce_friday_c9/domain/di/di.dart';
+import 'package:e_commerce_friday_c9/ui/cubits/cart_cubit.dart';
 import 'package:e_commerce_friday_c9/ui/screens/main/tabs/home/home_view_model.dart';
 import 'package:e_commerce_friday_c9/ui/utils/app_assets.dart';
 import 'package:e_commerce_friday_c9/ui/utils/app_color.dart';
@@ -65,7 +67,6 @@ class _HomeTabState extends State<HomeTab> {
               BlocBuilder(
                 bloc: viewModel,
                 builder: (context, state) {
-                  print(viewModel.adsIndex);
                   return Container(
                     margin: EdgeInsets.only(bottom: 4),
                     child: Row(
@@ -101,7 +102,7 @@ class _HomeTabState extends State<HomeTab> {
                 builder: (context, state) {
                   if (state is BaseErrorState) {
                     return ErrorView(message: state.errorMessage);
-                  } else if (state is BaseSuccessState<CategoryDM>) {
+                  } else if (state is BaseSuccessState<List<CategoryDM>>) {
                     return buildCategoriesList(state.data!);
                   } else {
                     return LoadingWidget();
@@ -111,29 +112,47 @@ class _HomeTabState extends State<HomeTab> {
           const Text("Home Appliance"),
           SizedBox(
             height: MediaQuery.of(context).size.height * .3,
-            child: BlocBuilder(
-                bloc: viewModel.getAllProductsUseCase,
-                builder: (context, state) {
-                  if (state is BaseErrorState) {
-                    return ErrorView(message: state.errorMessage);
-                  } else if (state is BaseSuccessState<ProductDM>) {
-                    return buildProductsList(state.data!);
-                  } else {
-                    return LoadingWidget();
-                  }
-                }),
+            child: BlocBuilder<CartCubit, dynamic>(
+              builder: (context, cartState) {
+                if (cartState is BaseSuccessState<CartDM>) {
+                  return BlocBuilder(
+                      bloc: viewModel.getAllProductsUseCase,
+                      builder: (context, state) {
+                        if (state is BaseErrorState) {
+                          return ErrorView(message: state.errorMessage);
+                        } else if (state is BaseSuccessState<List<ProductDM>>) {
+                          return buildProductsList(
+                              state.data!, cartState.data!);
+                        } else {
+                          return LoadingWidget();
+                        }
+                      });
+                } else if (cartState is BaseErrorState) {
+                  return ErrorView(message: cartState.errorMessage);
+                } else {
+                  return LoadingWidget();
+                }
+              },
+            ),
           )
         ],
       ),
     );
   }
 
-  Widget buildProductsList(List<ProductDM> products) {
+  Widget buildProductsList(List<ProductDM> products, CartDM cartDM) {
     return ListView.builder(
         itemCount: products.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          return Product(productDM: products[index]);
+          ProductDM productDM = products[index];
+          bool isInCart = false;
+          for (int i = 0; i < cartDM.products!.length; i++) {
+            if (productDM.id == cartDM.products![i].product?.id) {
+              isInCart = true;
+            }
+          }
+          return Product(productDM: productDM, isInCart: isInCart);
         });
   }
 

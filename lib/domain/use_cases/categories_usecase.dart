@@ -17,6 +17,6 @@ class GetAllCategoriesUseCase extends Cubit {
 
     Either<Failure, List<CategoryDM>> either = await repo.getCategories();
     either.fold((failure) => emit(BaseErrorState(failure.errorMessage)),
-        (r) => emit(BaseSuccessState<CategoryDM>(data: r)));
+        (r) => emit(BaseSuccessState<List<CategoryDM>>(data: r)));
   }
 }

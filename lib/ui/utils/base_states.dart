@@ -11,7 +11,7 @@ class BaseErrorState {
 }
 
 class BaseSuccessState<Type> {
-  List<Type>? data;
+  Type? data;
 
   BaseSuccessState({this.data});
 }
