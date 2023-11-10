@@ -1,3 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerce_friday_c9/data/model/api/response/product_dm.dart';
+import 'package:e_commerce_friday_c9/ui/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -5,16 +8,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../utils/app_assets.dart';
 import '../utils/app_color.dart';
 
-class Product extends StatefulWidget {
+class ProductItem extends StatefulWidget {
+  ProductDM model;
 
-  Product();
+  ProductItem(this.model, {super.key});
 
   @override
-  State<Product> createState() => _ProductState();
+  State<ProductItem> createState() => _ProductItemState();
 }
 
-class _ProductState extends State<Product> {
-
+class _ProductItemState extends State<ProductItem> {
   @override
   void initState() {
     super.initState();
@@ -22,12 +25,12 @@ class _ProductState extends State<Product> {
 
   @override
   Widget build(BuildContext context) {
-   return InkWell(
+    return InkWell(
       onTap: () {},
       child: Container(
-        padding: EdgeInsets.all(6),
+        padding: const EdgeInsets.all(6),
         width: MediaQuery.of(context).size.width * .4,
-        margin: EdgeInsets.all(12),
+        margin: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           border: Border.all(color: AppColors.lightBlue),
           borderRadius: BorderRadius.circular(12),
@@ -38,8 +41,10 @@ class _ProductState extends State<Product> {
             Stack(
               alignment: Alignment.topRight,
               children: [
-                Image.network(
-                  "",
+                CachedNetworkImage(
+                  imageUrl: widget.model.imageCover ?? "",
+                  placeholder: (_, __) => const LoadingWidget(),
+                  errorWidget: (_, __, ___) => const Icon(Icons.error),
                   width: double.infinity,
                   fit: BoxFit.cover,
                   height: MediaQuery.of(context).size.height * .15,
@@ -49,17 +54,17 @@ class _ProductState extends State<Product> {
                 )
               ],
             ),
-            Spacer(),
+            const Spacer(),
             Text(
-               "",
+              widget.model.title ?? "",
               textAlign: TextAlign.start,
               maxLines: 2,
               style: TextStyle(height: 1),
             ),
-            Spacer(),
+            const Spacer(),
             Row(
               children: [
-                Text("Review()"),
+                Text("Review(${widget.model.ratingsAverage ?? ""})"),
                 Icon(
                   Icons.star,
                   color: Colors.amberAccent,
@@ -68,17 +73,15 @@ class _ProductState extends State<Product> {
             ),
             Row(
               children: [
-                Text("EGP "),
-                Spacer(),
+                Text("EGP ${widget.model.price}"),
+                const Spacer(),
                 SizedBox(
                   width: 30,
                   height: 30,
                   child: FloatingActionButton(
                     backgroundColor: AppColors.primaryColor,
-                    onPressed: () {
-
-                    },
-                    child: Icon(
+                    onPressed: () {},
+                    child: const Icon(
                       Icons.add,
                       color: Colors.white,
                     ),
