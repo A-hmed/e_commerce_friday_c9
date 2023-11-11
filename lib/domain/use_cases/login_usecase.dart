@@ -1,10 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:e_commerce_friday_c9/data/repos/auth_repo/auth_repo_impl.dart';
 import 'package:injectable/injectable.dart';
+
+import '../repos/auth_repo/auth_repo.dart';
 
 @injectable
 class LoginUseCase {
-  AuthRepoImpl repo;
+  AuthRepo repo;
 
   LoginUseCase(this.repo);
 

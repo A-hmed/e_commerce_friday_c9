@@ -1,7 +1,7 @@
 import 'package:e_commerce_friday_c9/domain/di/di.dart';
 import 'package:e_commerce_friday_c9/ui/screens/auth/login/login_view_model.dart';
 import 'package:e_commerce_friday_c9/ui/screens/auth/register/register.dart';
-import 'package:e_commerce_friday_c9/ui/screens/home/home.dart';
+import 'package:e_commerce_friday_c9/ui/screens/main/main.dart';
 import 'package:e_commerce_friday_c9/ui/utils/app_assets.dart';
 import 'package:e_commerce_friday_c9/ui/utils/base_request_states.dart';
 import 'package:e_commerce_friday_c9/ui/utils/dialog_utils.dart';
@@ -28,7 +28,7 @@ class Login extends StatelessWidget {
           showErrorDialog(context, state.message);
         } else if (state is BaseRequestSuccessState) {
           hideLoading(context);
-          Navigator.pushReplacementNamed(context, Home.routeName);
+          Navigator.pushReplacementNamed(context, Main.routeName);
         }
       },
       child: Scaffold(

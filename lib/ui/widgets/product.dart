@@ -1,20 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerce_friday_c9/data/model/response/product_dm.dart';
+import 'package:e_commerce_friday_c9/ui/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../utils/app_assets.dart';
 import '../utils/app_color.dart';
 
 class Product extends StatefulWidget {
+  final ProductDM productDM;
 
-  Product();
+  const Product(this.productDM, {super.key});
 
   @override
-  State<Product> createState() => _ProductState();
+  State<Product> createState() => ProductState();
 }
 
-class _ProductState extends State<Product> {
-
+class ProductState extends State<Product> {
   @override
   void initState() {
     super.initState();
@@ -22,7 +23,7 @@ class _ProductState extends State<Product> {
 
   @override
   Widget build(BuildContext context) {
-   return InkWell(
+    return InkWell(
       onTap: () {},
       child: Container(
         padding: EdgeInsets.all(6),
@@ -38,8 +39,10 @@ class _ProductState extends State<Product> {
             Stack(
               alignment: Alignment.topRight,
               children: [
-                Image.network(
-                  "",
+                CachedNetworkImage(
+                  imageUrl: widget.productDM.imageCover ?? "",
+                  placeholder: (_, __) => LoadingWidget(),
+                  errorWidget: (_, __, ___) => Icon(Icons.error),
                   width: double.infinity,
                   fit: BoxFit.cover,
                   height: MediaQuery.of(context).size.height * .15,
@@ -51,7 +54,7 @@ class _ProductState extends State<Product> {
             ),
             Spacer(),
             Text(
-               "",
+              widget.productDM.title ?? "",
               textAlign: TextAlign.start,
               maxLines: 2,
               style: TextStyle(height: 1),
@@ -59,7 +62,7 @@ class _ProductState extends State<Product> {
             Spacer(),
             Row(
               children: [
-                Text("Review()"),
+                Text("Review(${widget.productDM.ratingsAverage})"),
                 Icon(
                   Icons.star,
                   color: Colors.amberAccent,
@@ -68,16 +71,14 @@ class _ProductState extends State<Product> {
             ),
             Row(
               children: [
-                Text("EGP "),
+                Text("EGP ${widget.productDM.price}"),
                 Spacer(),
                 SizedBox(
                   width: 30,
                   height: 30,
                   child: FloatingActionButton(
                     backgroundColor: AppColors.primaryColor,
-                    onPressed: () {
-
-                    },
+                    onPressed: () {},
                     child: Icon(
                       Icons.add,
                       color: Colors.white,

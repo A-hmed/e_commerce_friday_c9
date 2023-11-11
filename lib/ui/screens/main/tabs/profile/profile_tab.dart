@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Home extends StatelessWidget {
-  const Home({super.key});
-
-  static const String routeName = "home";
+class ProfileTab extends StatelessWidget {
+  const ProfileTab({super.key});
 
   @override
   Widget build(BuildContext context) {

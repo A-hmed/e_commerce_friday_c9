@@ -5,10 +5,10 @@ import 'package:e_commerce_friday_c9/data/repos/auth_repo/data_sources/auth_onli
 import 'package:e_commerce_friday_c9/domain/repos/auth_repo/auth_repo.dart';
 import 'package:injectable/injectable.dart';
 
-@injectable
+@Injectable(as: AuthRepo)
 class AuthRepoImpl extends AuthRepo {
   AuthOnlineDataSourceImpl onlineDataSource;
-  Connectivity connectivity;
+  Connectivity connectivity = Connectivity();
 
   AuthRepoImpl(this.onlineDataSource, this.connectivity);
 
