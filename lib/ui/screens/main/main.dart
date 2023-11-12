@@ -1,4 +1,5 @@
 import 'package:e_commerce_friday_c9/ui/cubits/cart_cubit.dart';
+import 'package:e_commerce_friday_c9/ui/screens/cart/cart.dart';
 import 'package:e_commerce_friday_c9/ui/screens/main/main_view_model.dart';
 import 'package:e_commerce_friday_c9/ui/utils/app_assets.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,20 @@ class _MainScreenState extends State<MainScreen> {
         bloc: viewModel,
         builder: (context, state) {
           return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              actions: [
+                InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, CartScreen.routeName);
+                    },
+                    child: const Icon(
+                      Icons.shopping_cart,
+                      color: AppColors.primaryColor,
+                    ))
+              ],
+            ),
             body: viewModel.tabs[viewModel.currentSelectedTab],
             bottomNavigationBar: Theme(
               data: ThemeData(canvasColor: AppColors.primaryColor),

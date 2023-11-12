@@ -14,28 +14,38 @@ class CartCubit extends Cubit {
   GetUserCartUseCase userCartUseCase;
   AddProductToCartUseCase addProductToCartUseCase;
   RemoveProductFromCartUseCase removeProductFromCartUseCase;
+  CartDM? cartDM;
 
   CartCubit(this.userCartUseCase, this.addProductToCartUseCase,
       this.removeProductFromCartUseCase)
       : super(BaseInitialState());
 
   loadCart() async {
+    emit(BaseLoadingState());
     Either<Failure, CartDM> either = await userCartUseCase.execute();
-    either.fold((error) => emit(BaseErrorState(error.errorMessage)),
-        (cart) => emit(BaseSuccessState<CartDM>(data: cart)));
+    either.fold((error) => emit(BaseErrorState(error.errorMessage)), (cart) {
+      cartDM = cart;
+      emit(BaseSuccessState<CartDM>(data: cart));
+    });
   }
 
   addProductToCart(String productId) async {
+    emit(BaseLoadingState());
     Either<Failure, CartDM> either =
         await addProductToCartUseCase.execute(productId);
-    either.fold((error) => emit(BaseErrorState(error.errorMessage)),
-        (cart) => emit(BaseSuccessState<CartDM>(data: cart)));
+    either.fold((error) => emit(BaseErrorState(error.errorMessage)), (cart) {
+      cartDM = cart;
+      emit(BaseSuccessState<CartDM>(data: cart));
+    });
   }
 
   removeProductFromCart(String productId) async {
+    emit(BaseLoadingState());
     Either<Failure, CartDM> either =
         await removeProductFromCartUseCase.execute(productId);
-    either.fold((error) => emit(BaseErrorState(error.errorMessage)),
-        (cart) => emit(BaseSuccessState<CartDM>(data: cart)));
+    either.fold((error) => emit(BaseErrorState(error.errorMessage)), (cart) {
+      cartDM = cart;
+      emit(BaseSuccessState<CartDM>(data: cart));
+    });
   }
 }

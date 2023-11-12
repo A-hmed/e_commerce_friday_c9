@@ -25,9 +25,9 @@ class _SplashScreenState extends State<SplashScreen> {
       SharedPrefUtils utils = getIt();
       String? token = await utils.getToken();
       if (token == null) {
-        Navigator.pushNamed(context, Login.routeName);
+        Navigator.pushReplacementNamed(context, Login.routeName);
       } else {
-        Navigator.pushNamed(context, MainScreen.routeName);
+        Navigator.pushReplacementNamed(context, MainScreen.routeName);
       }
     });
   }

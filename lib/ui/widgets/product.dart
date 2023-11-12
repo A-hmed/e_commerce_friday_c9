@@ -29,78 +29,75 @@ class _ProductState extends State<Product> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        padding: EdgeInsets.all(6),
-        width: MediaQuery.of(context).size.width * .4,
-        margin: EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.lightBlue),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Stack(
-              alignment: Alignment.topRight,
-              children: [
-                CachedNetworkImage(
-                  imageUrl: widget.productDM.imageCover ?? "",
-                  placeholder: (_, __) => LoadingWidget(),
-                  errorWidget: (_, __, ___) => Icon(Icons.error),
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  height: MediaQuery.of(context).size.height * .15,
-                ),
-                Image.asset(
-                  AppAssets.icFav,
-                )
-              ],
-            ),
-            Spacer(),
-            Text(
-              widget.productDM.title ?? "",
-              textAlign: TextAlign.start,
-              maxLines: 2,
-              style: TextStyle(height: 1),
-            ),
-            Spacer(),
-            Row(
-              children: [
-                Text("Review(${widget.productDM.ratingsAverage})"),
-                Icon(
-                  Icons.star,
-                  color: Colors.amberAccent,
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text("EGP ${widget.productDM.price}"),
-                Spacer(),
-                SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: FloatingActionButton(
-                    backgroundColor: AppColors.primaryColor,
-                    onPressed: () {
-                      if (widget.isInCart) {
-                        cartCubit.removeProductFromCart(widget.productDM.id!);
-                      } else {
-                        cartCubit.addProductToCart(widget.productDM.id!);
-                      }
-                    },
-                    child: Icon(
-                      widget.isInCart ? Icons.minimize : Icons.add,
-                      color: Colors.white,
-                    ),
+    return Container(
+      padding: EdgeInsets.all(6),
+      width: MediaQuery.of(context).size.width * .4,
+      margin: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColors.lightBlue),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Stack(
+            alignment: Alignment.topRight,
+            children: [
+              CachedNetworkImage(
+                imageUrl: widget.productDM.imageCover ?? "",
+                placeholder: (_, __) => LoadingWidget(),
+                errorWidget: (_, __, ___) => Icon(Icons.error),
+                width: double.infinity,
+                fit: BoxFit.cover,
+                height: MediaQuery.of(context).size.height * .15,
+              ),
+              Image.asset(
+                AppAssets.icFav,
+              )
+            ],
+          ),
+          Spacer(),
+          Text(
+            widget.productDM.title ?? "",
+            textAlign: TextAlign.start,
+            maxLines: 2,
+            style: TextStyle(height: 1),
+          ),
+          Spacer(),
+          Row(
+            children: [
+              Text("Review(${widget.productDM.ratingsAverage})"),
+              Icon(
+                Icons.star,
+                color: Colors.amberAccent,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text("EGP ${widget.productDM.price}"),
+              Spacer(),
+              SizedBox(
+                width: 30,
+                height: 30,
+                child: FloatingActionButton(
+                  backgroundColor: AppColors.primaryColor,
+                  onPressed: () {
+                    if (widget.isInCart) {
+                      cartCubit.removeProductFromCart(widget.productDM.id!);
+                    } else {
+                      cartCubit.addProductToCart(widget.productDM.id!);
+                    }
+                  },
+                  child: Icon(
+                    widget.isInCart ? Icons.minimize : Icons.add,
+                    color: Colors.white,
                   ),
                 ),
-              ],
-            )
-          ],
-        ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
