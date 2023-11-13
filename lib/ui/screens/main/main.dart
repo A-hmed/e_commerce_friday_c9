@@ -1,14 +1,28 @@
 import 'package:e_commerce_friday_c9/ui/screens/main/main_view_model.dart';
+import 'package:e_commerce_friday_c9/ui/shared_view_models/cart_view_model.dart';
 import 'package:e_commerce_friday_c9/ui/utils/app_assets.dart';
 import 'package:e_commerce_friday_c9/ui/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   static const String routeName = "main";
-  MainViewModel viewModel = MainViewModel();
 
   MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  MainViewModel viewModel = MainViewModel();
+
+  @override
+  void initState() {
+    super.initState();
+    CartViewModel viewModel = BlocProvider.of(context);
+    viewModel.loadCart();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +63,12 @@ class MainScreen extends StatelessWidget {
     return BottomNavigationBarItem(
         icon: selected
             ? CircleAvatar(
-                radius: selected ? 20 : 0,
-                backgroundColor: selected ? Colors.white : Colors.transparent,
-                child: ImageIcon(
-                  AssetImage(asset),
-                  size: 30,
-                ))
+            radius: selected ? 20 : 0,
+            backgroundColor: selected ? Colors.white : Colors.transparent,
+            child: ImageIcon(
+              AssetImage(asset),
+              size: 30,
+            ))
             : ImageIcon(AssetImage(asset), size: 30),
         label: "");
   }

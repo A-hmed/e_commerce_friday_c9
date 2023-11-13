@@ -1,9 +1,10 @@
+import 'package:e_commerce_friday_c9/data/model/response/cart_dm.dart';
 import 'package:e_commerce_friday_c9/data/model/response/category_dm.dart';
 import 'package:e_commerce_friday_c9/data/model/response/product_dm.dart';
 import 'package:e_commerce_friday_c9/domain/di/di.dart';
 import 'package:e_commerce_friday_c9/ui/screens/main/tabs/home/home_view_model.dart';
+import 'package:e_commerce_friday_c9/ui/shared_view_models/cart_view_model.dart';
 import 'package:e_commerce_friday_c9/ui/utils/base_states.dart';
-import 'package:e_commerce_friday_c9/ui/utils/extensions.dart';
 import 'package:e_commerce_friday_c9/ui/widgets/category_item.dart';
 import 'package:e_commerce_friday_c9/ui/widgets/error_view.dart';
 import 'package:e_commerce_friday_c9/ui/widgets/loading_widget.dart';
@@ -20,10 +21,12 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   HomeViewModel viewModel = getIt();
+  late CartViewModel cartViewModel;
 
   @override
   void initState() {
     super.initState();
+    cartViewModel = BlocProvider.of(context, listen: false);
     viewModel.loadCategories();
     viewModel.loadProducts();
   }
@@ -75,10 +78,31 @@ class _HomeTabState extends State<HomeTab> {
         return CategoryItem(categoryDM: list[index]);
       });
 
-  Widget buildProductsListView(List<ProductDM> list) => ListView.builder(
-      itemCount: list.length,
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {
-        return ProductItem(productDM: list[index]);
-      });
+  Widget buildProductsListView(List<ProductDM> list) =>
+      BlocBuilder<CartViewModel, dynamic>(
+        builder: (context, state) {
+          if (state is! BaseLoadingState) {
+            CartDM? cartDM = cartViewModel.cartDm;
+            return ListView.builder(
+                itemCount: list.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  var product = list[index];
+                  bool isInCart = false;
+                  if (cartDM != null && cartDM.products != null) {
+                    var productsInCart = cartDM.products!;
+                    for (int i = 0; i < productsInCart.length; i++) {
+                      if (product.id == productsInCart[i].product?.id) {
+                        isInCart = true;
+                      }
+                    }
+                  }
+
+                  return ProductItem(productDM: product, isInCart: isInCart);
+                });
+          } else {
+            return const LoadingWidget();
+          }
+        },
+      );
 }

@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:e_commerce_friday_c9/data/model/failures.dart';
+import 'package:e_commerce_friday_c9/data/model/response/cart_dm.dart';
+import 'package:e_commerce_friday_c9/data/model/response/cart_response.dart';
 import 'package:e_commerce_friday_c9/data/model/response/categorie_response.dart';
 import 'package:e_commerce_friday_c9/data/model/response/category_dm.dart';
 import 'package:e_commerce_friday_c9/data/model/response/product_dm.dart';
@@ -12,8 +14,14 @@ import 'package:e_commerce_friday_c9/ui/utils/end_points.dart';
 import 'package:http/http.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../utils/sharedpref_utils.dart';
+
 @Injectable(as: MainOnlineDS)
 class MainOnlineDSImpl extends MainOnlineDS {
+  SharedPrefUtils sharedPrefUtils;
+
+  MainOnlineDSImpl(this.sharedPrefUtils);
+
   @override
   Future<Either<Failure, List<CategoryDM>>> getCategories() async {
     try {
@@ -41,7 +49,7 @@ class MainOnlineDSImpl extends MainOnlineDS {
       Uri url = Uri.https(EndPoints.baseUrl, EndPoints.products);
       Response serverResponse = await get(url);
       var myResponse =
-          ProductsResponse.fromJson(jsonDecode(serverResponse.body));
+      ProductsResponse.fromJson(jsonDecode(serverResponse.body));
       if (serverResponse.statusCode >= 200 &&
           serverResponse.statusCode < 300 &&
           myResponse.data?.isNotEmpty == true) {
@@ -52,6 +60,65 @@ class MainOnlineDSImpl extends MainOnlineDS {
       }
     } catch (error, stacktrace) {
       print("Handling exception: ${error}, stackTrace: $stacktrace");
+      return Left(Failure(Constants.defaultErrorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CartDM>> getLoggedUserCart() async {
+    try {
+      Uri url = Uri.https(EndPoints.baseUrl, EndPoints.cart);
+      String token = (await sharedPrefUtils.getToken())!;
+      Response serverResponse = await get(url, headers: {"token": token});
+      CartResponse cartResponse =
+          CartResponse.fromJson(jsonDecode(serverResponse.body));
+      if (serverResponse.statusCode >= 200 &&
+          serverResponse.statusCode < 300 &&
+          cartResponse.data != null) {
+        return Right(cartResponse.data!);
+      } else {
+        return Left(
+            Failure(cartResponse.message ?? Constants.defaultErrorMessage));
+      }
+    } catch (e) {
+      print("Exception while getLoggedUserCart: ${e}");
+      return Left(Failure(Constants.defaultErrorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CartDM>> addProductToCart(String id) async {
+    try {
+      Uri url = Uri.https(EndPoints.baseUrl, EndPoints.cart);
+      String token = (await sharedPrefUtils.getToken())!;
+      Response serverResponse =
+          await post(url, body: {"productId": id}, headers: {"token": token});
+      Map json = jsonDecode(serverResponse.body);
+      if (serverResponse.statusCode >= 200 && serverResponse.statusCode < 300) {
+        return getLoggedUserCart();
+      } else {
+        return Left(Failure(json["message"] ?? Constants.defaultErrorMessage));
+      }
+    } catch (e) {
+      print("Exception while getLoggedUserCart: ${e}");
+      return Left(Failure(Constants.defaultErrorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CartDM>> removeProductFromCart(String id) async {
+    try {
+      Uri url = Uri.parse("https://${EndPoints.baseUrl}${EndPoints.cart}/$id");
+      String token = (await sharedPrefUtils.getToken())!;
+      Response serverResponse = await delete(url, headers: {"token": token});
+      Map json = jsonDecode(serverResponse.body);
+      if (serverResponse.statusCode >= 200 && serverResponse.statusCode < 300) {
+        return getLoggedUserCart();
+      } else {
+        return Left(Failure(json["message"] ?? Constants.defaultErrorMessage));
+      }
+    } catch (e) {
+      print("Exception while getLoggedUserCart: ${e}");
       return Left(Failure(Constants.defaultErrorMessage));
     }
   }

@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:e_commerce_friday_c9/data/model/failures.dart';
+import 'package:e_commerce_friday_c9/data/model/response/cart_dm.dart';
 import 'package:e_commerce_friday_c9/data/model/response/category_dm.dart';
 import 'package:e_commerce_friday_c9/data/model/response/product_dm.dart';
 import 'package:e_commerce_friday_c9/domain/repos/main_repo/data_sources/main_online_ds.dart';
@@ -29,6 +30,33 @@ class MainRepoImpl extends MainRepo {
   Future<Either<Failure, List<ProductDM>>> getProducts() async {
     if (await connectivity.isInternetConnected) {
       return ds.getProducts();
+    } else {
+      return Left(Failure(Constants.internetErrorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CartDM>> addProductToCart(String id) async {
+    if (await connectivity.isInternetConnected) {
+      return ds.addProductToCart(id);
+    } else {
+      return Left(Failure(Constants.internetErrorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CartDM>> getLoggedUserCart() async {
+    if (await connectivity.isInternetConnected) {
+      return ds.getLoggedUserCart();
+    } else {
+      return Left(Failure(Constants.internetErrorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CartDM>> removeProductFromCart(String id) async {
+    if (await connectivity.isInternetConnected) {
+      return ds.removeProductFromCart(id);
     } else {
       return Left(Failure(Constants.internetErrorMessage));
     }
