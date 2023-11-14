@@ -1,17 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_friday_c9/data/model/api/response/product_dm.dart';
+import 'package:e_commerce_friday_c9/ui/shared_view_models/cart_view_model.dart';
 import 'package:e_commerce_friday_c9/ui/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../utils/app_assets.dart';
 import '../utils/app_color.dart';
 
 class ProductItem extends StatefulWidget {
   ProductDM model;
+  bool isInCart;
 
-  ProductItem(this.model, {super.key});
+  ProductItem(this.model, this.isInCart, {super.key});
 
   @override
   State<ProductItem> createState() => _ProductItemState();
@@ -80,9 +81,16 @@ class _ProductItemState extends State<ProductItem> {
                   height: 30,
                   child: FloatingActionButton(
                     backgroundColor: AppColors.primaryColor,
-                    onPressed: () {},
-                    child: const Icon(
-                      Icons.add,
+                    onPressed: () {
+                      CartViewModel viewModel = BlocProvider.of(context);
+                      if (widget.isInCart) {
+                        viewModel.removeFromCart(widget.model.id!);
+                      } else {
+                        viewModel.addProductToCart(widget.model.id!);
+                      }
+                    },
+                    child: Icon(
+                      widget.isInCart ? Icons.remove : Icons.add,
                       color: Colors.white,
                     ),
                   ),

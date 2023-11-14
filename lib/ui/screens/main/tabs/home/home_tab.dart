@@ -1,10 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:e_commerce_friday_c9/data/model/api/response/category_dm.dart';
 import 'package:e_commerce_friday_c9/data/model/api/response/product_dm.dart';
 import 'package:e_commerce_friday_c9/domain/di/di.dart';
-import 'package:e_commerce_friday_c9/domain/use_cases/get_all_categories_usecase.dart';
 import 'package:e_commerce_friday_c9/ui/screens/main/tabs/home/home_view_model.dart';
+import 'package:e_commerce_friday_c9/ui/shared_view_models/cart_view_model.dart';
 import 'package:e_commerce_friday_c9/ui/utils/base_request_states.dart';
 import 'package:e_commerce_friday_c9/ui/widgets/category_item.dart';
 import 'package:e_commerce_friday_c9/ui/widgets/loading_widget.dart';
@@ -21,10 +19,12 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   HomeViewModel viewModel = getIt();
+  late CartViewModel cartViewModel;
 
   @override
   void initState() {
     super.initState();
+    cartViewModel = BlocProvider.of(context);
     viewModel.loadCategories();
     viewModel.loadProducts();
   }
@@ -81,10 +81,25 @@ class _HomeTabState extends State<HomeTab> {
         itemBuilder: (context, index) => CategoryItem(list[index]));
   }
 
-  Widget buildProductsList(List<ProductDM> list) {
-    return ListView.builder(
-        itemCount: list.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => ProductItem(list[index]));
+  Widget buildProductsList(
+    List<ProductDM> list,
+  ) {
+    return BlocBuilder<CartViewModel, dynamic>(
+      builder: (context, state) {
+        print("Cart state: ${state}");
+        return ListView.builder(
+            itemCount: list.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              var product = list[index];
+              bool isInCart = false;
+              if (cartViewModel.cartDM != null) {
+                isInCart = cartViewModel.isInCart(
+                    product, cartViewModel.cartDM!.products);
+              }
+              return ProductItem(product, isInCart);
+            });
+      },
+    );
   }
 }

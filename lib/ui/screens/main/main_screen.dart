@@ -3,14 +3,24 @@ import 'package:e_commerce_friday_c9/ui/screens/main/tabs/categories/categories_
 import 'package:e_commerce_friday_c9/ui/screens/main/tabs/fav/fav_tab.dart';
 import 'package:e_commerce_friday_c9/ui/screens/main/tabs/home/home_tab.dart';
 import 'package:e_commerce_friday_c9/ui/screens/main/tabs/profile/profile_tab.dart';
+import 'package:e_commerce_friday_c9/ui/shared_view_models/cart_view_model.dart';
 import 'package:e_commerce_friday_c9/ui/utils/app_assets.dart';
 import 'package:e_commerce_friday_c9/ui/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   static const String routeName = "main";
+
+  MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
   final MainViewModel viewModel = MainViewModel();
+
   List<Widget> tabs = const [
     HomeTab(),
     CategoriesTab(),
@@ -18,7 +28,11 @@ class MainScreen extends StatelessWidget {
     ProfileTab(),
   ];
 
-  MainScreen({super.key});
+  @override
+  void initState() {
+    super.initState();
+    CartViewModel.get(context).loadCart();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +74,12 @@ class MainScreen extends StatelessWidget {
     return BottomNavigationBarItem(
         icon: selected
             ? CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.white,
-                child: ImageIcon(
-                  AssetImage(asset),
-                  size: 30,
-                ))
+            radius: 20,
+            backgroundColor: Colors.white,
+            child: ImageIcon(
+              AssetImage(asset),
+              size: 30,
+            ))
             : ImageIcon(AssetImage(asset), size: 30),
         label: "");
   }
