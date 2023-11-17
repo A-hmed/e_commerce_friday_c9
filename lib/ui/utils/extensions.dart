@@ -11,10 +11,13 @@ extension ConnectivityExtenstions on Connectivity {
 
 extension ScreenPercentage on num {
   double h(BuildContext context) {
-    return MediaQuery.of(context).size.height / this;
+    return (this / MediaQuery.of(context).size.height) * 100;
   }
 
   double w(BuildContext context) {
-    return MediaQuery.of(context).size.width / this;
+    return (this / MediaQuery
+        .of(context)
+        .size
+        .width) * 100;
   }
 }

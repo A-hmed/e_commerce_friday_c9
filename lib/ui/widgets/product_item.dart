@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_friday_c9/data/model/response/product_dm.dart';
+import 'package:e_commerce_friday_c9/ui/screens/product_details/product_details_screen.dart';
 import 'package:e_commerce_friday_c9/ui/shared_view_models/cart_view_model.dart';
 import 'package:e_commerce_friday_c9/ui/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,10 @@ class _ProductItemState extends State<ProductItem> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, ProductDetails.routeName,
+            arguments: widget.productDM);
+      },
       child: Container(
         padding: const EdgeInsets.all(6),
         width: MediaQuery.of(context).size.width * .4,

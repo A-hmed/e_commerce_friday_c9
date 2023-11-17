@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:e_commerce_friday_c9/data/model/failures.dart';
+import 'package:e_commerce_friday_c9/data/model/response/cart_product.dart';
+import 'package:e_commerce_friday_c9/data/model/response/product_dm.dart';
 import 'package:e_commerce_friday_c9/domain/use_cases/add_product_to_cart_usecase.dart';
 import 'package:e_commerce_friday_c9/domain/use_cases/get_logged_user_cart_usecase.dart';
 import 'package:e_commerce_friday_c9/domain/use_cases/remove_product_from_cart_usecase.dart';
@@ -50,5 +52,17 @@ class CartViewModel extends Cubit {
       cartDm = cart;
       emit(BaseSuccessState());
     });
+  }
+
+  CartProduct? isInCart(ProductDM productDM) {
+    if (cartDm != null && cartDm!.products != null) {
+      var productsInCart = cartDm!.products!;
+      for (int i = 0; i < productsInCart.length; i++) {
+        if (productDM.id == productsInCart[i].product?.id) {
+          return productsInCart[i];
+        }
+      }
+    }
+    return null;
   }
 }
